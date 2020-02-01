@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard, 
 import SubmitButton from '../elements/Submit';
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function Login() {
+export default function Login({navigation}) {
     const [loginData, setLoginData] = useState({email:'', password:''});
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
@@ -11,8 +11,6 @@ export default function Login() {
     function fncLogin() {
         setSubmit(true);
         const { email, password } = loginData;
-        console.log('email', email.length);
-        console.log('password', password.length);
         if(email === undefined || email.length == 0) {
             setEmailError(true);
         } else {
@@ -24,8 +22,6 @@ export default function Login() {
             setPasswordError(false);
         }
         if(email.length > 0 && password.length > 0) {
-            console.log('emailError', emailError);
-            console.log('passwordError', passwordError);
             fetch('http://35.160.197.175:3006/api/v1/user/login',
             {
                 method: 'POST',
@@ -36,12 +32,16 @@ export default function Login() {
                     'email': email,
                     'password': password
                 })
-            }).then((response) => {
-                if (response.status == 200) {
-                    Alert.alert('Success', "Login Succesfully");
+            })
+            .then((response) => {
+                if(response.status === 200) {
+                    return(response.json());
                 } else {
                     Alert.alert('Error', "Invalid email or password"); 
                 }
+            })
+            .then((result) => {
+                navigation.navigate('Home', {result});
             })
         }
 
