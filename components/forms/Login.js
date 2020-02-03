@@ -34,14 +34,14 @@ export default function Login({navigation}) {
                 })
             })
             .then((response) => {
-                if(response.status === 200) {
-                    return(response.json());
+                return(response.json());
+            })
+            .then((result) => {
+                if(result.id) {
+                    navigation.navigate('Home', {result});
                 } else {
                     Alert.alert('Error', "Invalid email or password"); 
                 }
-            })
-            .then((result) => {
-                navigation.navigate('Home', {result});
             })
         }
 
