@@ -37,6 +37,7 @@ export default function Login({navigation}) {
                 return(response.json());
             })
             .then((result) => {
+                console.log(result);
                 if(result.id) {
                     navigation.navigate('Home', {result});
                 } else {
